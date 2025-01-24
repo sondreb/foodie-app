@@ -9,7 +9,12 @@
   </div>
   <div class="nav-links">
     <a routerLink="/places" routerLinkActive="active">Places</a>
-    <a routerLink="/login" routerLinkActive="active">Login</a>
+    <ng-container *ngIf="!isLoggedIn">
+      <a routerLink="/login" routerLinkActive="active">Login</a>
+    </ng-container>
+    <ng-container *ngIf="isLoggedIn">
+      <a routerLink="/logout">Logout</a>
+    </ng-container>
   </div>
 </nav>
 <main class="main-content">

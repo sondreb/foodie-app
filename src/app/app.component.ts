@@ -13,6 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class AppComponent implements OnInit {
   deferredPrompt: any;
   showInstallButton = false;
+  isLoggedIn = false; // This should be managed by an auth service in a real app
 
   ngOnInit() {
     window.addEventListener('beforeinstallprompt', (e) => {
