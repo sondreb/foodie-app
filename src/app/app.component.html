@@ -1,22 +1,4 @@
-<nav class="navbar">
-  <div class="navbar-brand">
-    <a routerLink="/home">
-      <img src="/icons/icon-128x128.png" alt="Foodie Logo" class="nav-logo" />
-    </a>
-  </div>
-  <div class="search-container">
-    <input type="text" placeholder="Search..." class="search-input" />
-  </div>
-  <div class="nav-links">
-    <a routerLink="/places" routerLinkActive="active">Places</a>
-    <ng-container *ngIf="!isLoggedIn">
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-    </ng-container>
-    <ng-container *ngIf="isLoggedIn">
-      <a routerLink="/logout">Logout</a>
-    </ng-container>
-  </div>
-</nav>
+<app-navbar></app-navbar>
 <main class="main-content">
   <router-outlet></router-outlet>
 </main>

@@ -2,6 +2,11 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
 
+interface LoginUser {
+  username: string;
+  id: string;
+}
+
 export class UserInfo {
   publicKey?: string;
 
@@ -9,8 +14,11 @@ export class UserInfo {
 
   short?: string;
 
+  username?: string;
+  id?: string;
+
   authenticated() {
-    return !!this.publicKeyHex;
+    return !!this.username || !!this.publicKeyHex;
   }
 }
 
@@ -99,6 +107,28 @@ export class AuthenticationService {
     return user;
   }
 
+  async loginWithCredentials(username: string, password: string) {
+    const response = await fetch(`${this.baseUrl}/authenticate/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        password
+      })
+    });
+
+    const data = await response.json();
+      
+    if (!response.ok || !data.success) {
+      throw new Error(data.message || 'Login failed');
+    }
+
+    this.setLoggedInUser(data.user);
+    return data.user;
+  }
+
   logout2() {
     localStorage.removeItem('blockcore:hub:pubkey');
     localStorage.removeItem('blockcore:notes:nostr:prvkey');
@@ -140,5 +170,14 @@ export class AuthenticationService {
       this.authInfo$.next(AuthenticationService.UNKNOWN_USER);
       return AuthenticationService.UNKNOWN_USER;
     }
+  }
+
+  setLoggedInUser(user: LoginUser) {
+    const userInfo = new UserInfo();
+    userInfo.username = user.username;
+    userInfo.id = user.id;
+    this.authInfo$.next(userInfo);
+
+    console.log('AUTH INFO NEXT');
   }
 }
