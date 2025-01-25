@@ -34,7 +34,7 @@ export class AuthenticationService {
 
   constructor(private router: Router) {}
 
-  baseUrl = 'https://foodie-app.azurewebsite.net';
+  baseUrl = 'https://foodie-app.azurewebsites.net';
 
   async challenge() {
     const response = await fetch(`${this.baseUrl}/authenticate`);
