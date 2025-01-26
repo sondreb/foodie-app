@@ -24,6 +24,9 @@ import { Subscription } from 'rxjs';
       </div>
       <div class="nav-links">
         <a routerLink="/places" routerLinkActive="active">Places</a>
+        @if (isAdmin) {
+        <a routerLink="/admin" routerLinkActive="active">Admin</a>
+        }
         @if (!isAuthenticated) {
         <a routerLink="/login" routerLinkActive="active">Login</a>
         } @if (isAuthenticated) {
@@ -40,6 +43,7 @@ import { Subscription } from 'rxjs';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
+  isAdmin = false;
   private authSub?: Subscription;
 
   constructor(private authService: AuthenticationService) {}
@@ -49,6 +53,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authSub = this.authService.authInfo$.subscribe((user: UserInfo) => {
       console.log('User:', user);
       this.isAuthenticated = user.authenticated();
+      this.isAdmin = user.roles.includes('admin');
     });
 
     console.log('AUTH SUBSCRIBED');
