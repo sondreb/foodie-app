@@ -1,0 +1,64 @@
+import { Injectable } from '@angular/core';
+import { CreateUserRequest, UpdateUserRequest, User } from '../models/user.model';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ApiService {
+  private baseUrl = 'http://localhost:3000';
+
+  private defaultOptions: RequestInit = {
+    credentials: 'include', // This ensures cookies are sent with requests
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  private async fetchWithAuth(url: string, options: RequestInit = {}): Promise<Response> {
+    const finalOptions: RequestInit = {
+      ...this.defaultOptions,
+      ...options,
+      headers: {
+        ...this.defaultOptions.headers,
+        ...options.headers
+      }
+    };
+
+    const response = await fetch(`${this.baseUrl}${url}`, finalOptions);
+    
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'An error occurred' }));
+      throw new Error(error.message || `HTTP error! status: ${response.status}`);
+    }
+    
+    return response;
+  }
+
+  // User Management APIs
+  async getUsers(): Promise<User[]> {
+    const response = await this.fetchWithAuth('/admin/users');
+    return response.json();
+  }
+
+  async createUser(user: CreateUserRequest): Promise<User> {
+    const response = await this.fetchWithAuth('/admin/users', {
+      method: 'POST',
+      body: JSON.stringify(user)
+    });
+    return response.json();
+  }
+
+  async updateUser(id: string, user: UpdateUserRequest): Promise<User> {
+    const response = await this.fetchWithAuth(`/admin/users/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(user)
+    });
+    return response.json();
+  }
+
+  async deleteUser(id: string): Promise<void> {
+    await this.fetchWithAuth(`/admin/users/${id}`, {
+      method: 'DELETE'
+    });
+  }
+}
