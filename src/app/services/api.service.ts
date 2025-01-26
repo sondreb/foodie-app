@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import { CreateUserRequest, UpdateUserRequest, User } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ApiService {
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = environment.apiUrl;
 
   private defaultOptions: RequestInit = {
     credentials: 'include', // This ensures cookies are sent with requests

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Subject, Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface LoginUser {
   username: string;
@@ -30,8 +31,7 @@ export class AuthenticationService {
 
   constructor(private router: Router) {}
 
-  // baseUrl = 'https://foodie-app.azurewebsites.net';
-  baseUrl = 'http://localhost:3000';
+  baseUrl = environment.apiUrl;
 
   async challenge() {
     const response = await fetch(`${this.baseUrl}/authenticate`);
