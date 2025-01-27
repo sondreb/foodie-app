@@ -9,10 +9,12 @@ export class ApiService {
   private baseUrl = environment.apiUrl;
 
   private defaultOptions: RequestInit = {
-    credentials: 'include', // This ensures cookies are sent with requests
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    credentials: 'include', // Ensures cookies are sent with requests
+    // headers: {
+    //   'Content-Type': 'application/json',
+    //   'X-Requested-With': 'XMLHttpRequest' // Helps identify AJAX requests
+    // },
+    // mode: 'cors' // Explicitly enable CORS
   };
 
   private async fetchWithAuth(url: string, options: RequestInit = {}): Promise<Response> {
@@ -24,6 +26,8 @@ export class ApiService {
         ...options.headers
       }
     };
+
+    console.log('OPTIONS: ', finalOptions);
 
     const response = await fetch(`${this.baseUrl}${url}`, finalOptions);
     
